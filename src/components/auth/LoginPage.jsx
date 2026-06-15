@@ -8,15 +8,16 @@ export default function LoginPage({ onLogin, db }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     setLoading(true);
     setError("");
-    setTimeout(() => {
-      const user = db.users.find(u => u.username === username && u.password === password);
-      if (user) onLogin(user);
-      else setError("Username atau password salah.");
+    try {
+      await onLogin(username, password);
+    } catch (err) {
+      setError(err.message || "Username atau password salah.");
+    } finally {
       setLoading(false);
-    }, 600);
+    }
   };
 
   return (

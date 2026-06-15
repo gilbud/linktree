@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { resetDB as apiResetDB } from "../../lib/api";
 
 export default function AdminBackup({ db, saveDB }) {
   const fileInputRef = useRef();
@@ -23,11 +24,15 @@ export default function AdminBackup({ db, saveDB }) {
     URL.revokeObjectURL(url);
   };
 
-  const resetDB = () => {
+  const resetDB = async () => {
     if (!window.confirm("Reset database ke default?")) return;
 
-    localStorage.removeItem("linktree_db");
-    window.location.reload();
+    try {
+      const fresh = await apiResetDB();
+      saveDB(fresh);
+    } catch (err) {
+      alert("Gagal reset database: " + err.message);
+    }
   };
 
   return (

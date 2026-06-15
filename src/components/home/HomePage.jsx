@@ -4,7 +4,7 @@ import MenuCard from "./MenuCard";
 import LinkFormModal from "../admin/LinkFormModal";
 import SubmenuFormModal from "../admin/SubmenuFormModal";
 
-export default function HomePage({ user, db, saveDB, onAdmin }) {
+export default function HomePage({ user, db, saveDB, onAdmin, onLogout }) {
   const [showLinkForm, setShowLinkForm] = useState(false);
   const [showSubForm, setShowSubForm] = useState(false);
   const [editingLink, setEditingLink] = useState(null);
@@ -121,7 +121,7 @@ export default function HomePage({ user, db, saveDB, onAdmin }) {
                 <Icon name="settings" size={13} /> Admin
               </button>
             )}
-            <button onClick={() => window.location.reload()} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-50 text-gray-500 text-xs font-medium hover:bg-gray-100 transition-colors">
+            <button onClick={onLogout || (() => window.location.reload())} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-50 text-gray-500 text-xs font-medium hover:bg-gray-100 transition-colors">
               <Icon name="logout" size={13} /> Keluar
             </button>
           </div>
