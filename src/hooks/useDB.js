@@ -29,12 +29,16 @@ export function useDB() {
     return () => { cancelled = true; };
   }, []);
 
-  const saveDB = useCallback((newDB) => {
+  const saveDB = useCallback(async (newDB) => {
     setDB(newDB);
-    apiSaveDB(newDB).catch((err) => {
+    try {
+      await apiSaveDB(newDB);
+      setError(null);
+    } catch (err) {
       console.error("Gagal menyimpan ke server:", err);
       setError(err.message);
-    });
+      throw err;
+    }
   }, []);
 
   const reload = useCallback(async () => {

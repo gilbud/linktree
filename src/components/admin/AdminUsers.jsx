@@ -10,15 +10,19 @@ export default function AdminUsers({ db, saveDB }) {
   const openNew = () => { setForm(emptyUser); setEditing(null); setShowForm(true); };
   const openEdit = (u) => { setForm({ ...u }); setEditing(u.id); setShowForm(true); };
 
-  const saveForm = () => {
+  const saveForm = async () => {
     const newDB = { ...db };
     if (editing) {
       newDB.users = db.users.map(u => u.id === editing ? { ...form, id: u.id } : u);
     } else {
       newDB.users = [...db.users, { ...form, id: Date.now(), avatar: form.name.slice(0, 2).toUpperCase() }];
     }
-    saveDB(newDB);
-    setShowForm(false);
+    try {
+      await saveDB(newDB);
+      setShowForm(false);
+    } catch {
+      alert("Gagal menyimpan pengguna. Pastikan Anda login sebagai admin.");
+    }
   };
 
   const deleteUser = (id) => {
